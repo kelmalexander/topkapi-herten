@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="de" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topkapi-Grill & Pizzeria Herten | Frisch. Herzhaft. Unvergesslich.</title>
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Köstlicher Döner, ofenfrische Pizza & saftige Grillgerichte in Herten. Topkapi-Grill & Pizzeria - Genießen Sie traditionell-orientalische Spitzenqualität. Jetzt bestellen!">
+    <meta name="keywords" content="Döner Herten, Pizza Herten, Topkapi Grill, Bestes Essen Herten, Türkisches Restaurant Herten, Grillgerichte Herten, Lieferservice Herten, Lieferando Herten">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: {
+                            50: '#fbf8eb',
+                            100: '#f5edcb',
+                            200: '#ebd994',
+                            300: '#dfbe55',
+                            400: '#d5a52d',
+                            500: '#c59224',
+                            600: '#aa751c',
+                            700: '#865518',
+                            800: '#6d4318',
+                            900: '#5a3717',
+                        },
+                        brandDark: '#0B0C10',
+                        brandGray: '#1F2833',
+                        brandAccent: '#FF4C29',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Google Fonts & FontAwesome Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Leaflet JS (Alternative to Google Maps) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #070709;
+        }
+        .heading-serif {
+            font-family: 'Playfair Display', serif;
+        }
+        /* Hide scrollbars but keep functionality */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="text-gray-200 selection:bg-gold-500 selection:text-black overflow-x-hidden">
+
+<!-- Top Navigation Header -->
+<nav id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-300 py-4 px-4 md:px-8 bg-black/60 backdrop-blur-md border-b border-white/5">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+        <!-- Brand Logo/Title -->
+        <a href="#hero" class="flex items-center space-x-3 group">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-gold-500 to-amber-600 flex items-center justify-center shadow-lg shadow-gold-500/20 group-hover:scale-105 transition-transform">
+                <i class="fa-solid fa-fire text-black text-xl"></i>
+            </div>
+            <div>
+                <span class="block text-xl font-bold tracking-tight text-white group-hover:text-gold-400 transition-colors">TOPKAPI</span>
+                <span class="block text-xs uppercase tracking-widest text-gold-500 -mt-1 font-semibold">Grill & Pizzeria</span>
+            </div>
+        </a>
+
+        <!-- Desktop Navigation Items -->
+        <div class="hidden md:flex items-center space-x-8 font-medium text-sm tracking-wide">
+            <a href="#about" class="hover:text-gold-400 transition-colors relative after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-gold-400 hover:after:w-full after:transition-all">Über Uns</a>
+            <a href="#lokal" class="hover:text-gold-400 transition-colors relative after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-gold-400 hover:after:w-full after:transition-all">Unser Lokal</a>
+            <a href="#menu" class="hover:text-gold-400 transition-colors relative after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-gold-400 hover:after:w-full after:transition-all">Speisekarte</a>
+            <a href="#reviews" class="hover:text-gold-400 transition-colors relative after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-gold-400 hover:after:w-full after:transition-all">Kundenstimmen</a>
+            <a href="#atmosphere" class="hover:text-gold-400 transition-colors relative after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-gold-400 hover:after:w-full after:transition-all">Galerie</a>
+            <a href="#contact" class="hover:text-gold-400 transition-colors relative after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-gold-400 hover:after:w-full after:transition-all">Kontakt & Anfahrt</a>
+        </div>
+
+        <!-- CTA and Action Panel -->
+        <div class="flex items-center space-x-4">
+            <!-- Opening indicator -->
+            <div id="opening-status-badge" class="hidden lg:flex items-center space-x-2 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-full">
+                <span class="relative flex h-2.5 w-2.5">
+                    <span id="ping-indicator" class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span id="dot-indicator" class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                </span>
+                <span class="text-xs text-emerald-400 font-semibold" id="header-status">Jetzt geöffnet!</span>
+            </div>
+
+            <a href="https://www.lieferando.de/speisekarte/topkapi-grill-und-pizzeria-45701" target="_blank" rel="noopener noreferrer" class="hidden sm:inline-flex items-center justify-center px-5 py-2.5 text-xs font-bold uppercase tracking-widest text-black bg-gradient-to-r from-gold-400 via-gold-500 to-amber-500 rounded-full hover:shadow-lg hover:shadow-gold-500/20 hover:scale-[1.02] transition-all">
+                <i class="fa-solid fa-bicycle mr-2"></i> Online Bestellen
+            </a>
+
+            <!-- Mobile Menu Toggle Button -->
+            <button onclick="toggleMobileMenu()" class="md:hidden text-white hover:text-gold-400 p-1">
+                <i id="menu-icon" class="fa-solid fa-bars text-2xl"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Mobile Navigation Overlay Drawer -->
+    <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 w-full bg-black/95 backdrop-blur-xl border-b border-white/10 py-6 px-6 flex flex-col space-y-4 shadow-xl">
+        <a href="#about" onclick="toggleMobileMenu()" class="text-lg font-semibold text-stone-200 hover:text-gold-400">Über Uns</a>
+        <a href="#lokal" onclick="toggleMobileMenu()" class="text-lg font-semibold text-stone-200 hover:text-gold-400">Unser Lokal</a>
+        <a href="#menu" onclick="toggleMobileMenu()" class="text-lg font-semibold text-stone-200 hover:text-gold-400">Speisekarte / Highlights</a>
+        <a href="#reviews" onclick="toggleMobileMenu()" class="text-lg font-semibold text-stone-200 hover:text-gold-400">Bewertungen</a>
+        <a href="#atmosphere" onclick="toggleMobileMenu()" class="text-lg font-semibold text-stone-200 hover:text-gold-400">Galerie & Ambiente</a>
+        <a href="#contact" onclick="toggleMobileMenu()" class="text-lg font-semibold text-stone-200 hover:text-gold-400">Kontakt & Anfahrt</a>
+        <div class="pt-4 flex flex-col space-y-3">
+            <div class="flex items-center space-x-2 text-sm text-emerald-400 bg-emerald-500/10 px-3 py-2 rounded-lg w-max">
+                <span class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span>Lieferdienst &amp; Abholung bereit</span>
+            </div>
+            <a href="tel:02366585616" class="flex items-center justify-center space-x-2 bg-stone-900 border border-white/10 text-white font-bold py-3 rounded-xl hover:bg-stone-800 transition">
+                <i class="fa-solid fa-phone text-gold-400"></i>
+                <span>02366 585616 (Anrufen)</span>
+            </a>
+            <a href="https://www.lieferando.de/speisekarte/topkapi-grill-und-pizzeria-45701" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center space-x-2 bg-gradient-to-r from-gold-400 via-gold-500 to-amber-500 text-black font-extrabold py-3 rounded-xl hover:shadow-lg">
+                <i class="fa-solid fa-bicycle"></i>
+                <span>Auf Lieferando bestellen</span>
+            </a>
+        </div>
+    </div>
+</nav>
+
+<!-- 1. Hero Section -->
+<section id="hero" class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
+    <!-- Background Image with Overlay for Cinematic Lighting -->
+    <div class="absolute inset-0 z-0">
+        <img src="https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=2069&auto=format&fit=crop" 
+             alt="Zarte saftige Grillgerichte und Döner" 
+             class="w-full h-full object-cover object-center filter brightness-[0.25] scale-105 transform transition duration-[10s] hover:scale-100"
+             onerror="this.src='https://placehold.co/1920x1080/120a05/ffe6a7?text=Topkapi+Premium+Essen'">
+        <div class="absolute inset-0 bg-gradient-to-t from-[#070709] via-transparent to-black/70"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/30 to-transparent"></div>
+    </div>
+
+    <!-- Gold Accent Gradients -->
+    <div class="absolute top-1/4 left-1/10 w-96 h-96 bg-gold-600/10 rounded-full blur-[120px] pointer-events-none"></div>
+    <div class="absolute bottom-1/4 right-1/10 w-96 h-96 bg-brandAccent/10 rounded-full blur-[120px] pointer-events-none"></div>
+
+    <!-- Content Container -->
+    <div class="relative z-10 max-w-7xl mx-auto px-4 md:px-8 py-16 text-left w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <!-- Text details -->
+        <div class="lg:col-span-7 space-y-6 md:space-y-8">
+            <div class="inline-flex items-center space-x-2 bg-gold-500/10 border border-gold-500/30 px-3 py-1.5 rounded-full text-gold-400 text-xs md:text-sm font-semibold tracking-wider uppercase">
+                <i class="fa-solid fa-crown"></i>
+                <span>Bestes Essen in Herten</span>
+            </div>
+            
+            <h1 class="heading-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white leading-[1.1] tracking-tight">
+                Frisch. Herzhaft.<br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-gold-300 via-gold-500 to-amber-500">Unvergesslich.</span>
+            </h1>
+
+            <p class="text-base sm:text-lg md:text-xl text-stone-300 max-w-xl font-light leading-relaxed">
+                Döner, Pizza und Grillgerichte mit einem Geschmack, der begeistert. Frisch zubereitet im Herzen von Herten. Erlebe traditionelle Rezepte modern serviert.
+            </p>
+
+            <!-- Direct Quick-Action Buttons inside Hero -->
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 pt-4">
+                <a href="https://www.lieferando.de/speisekarte/topkapi-grill-und-pizzeria-45701" target="_blank" rel="noopener noreferrer" class="px-8 py-4 bg-gradient-to-r from-gold-400 via-gold-500 to-amber-500 text-black text-center font-bold rounded-xl shadow-lg shadow-gold-500/20 hover:shadow-gold-500/35 hover:-translate-y-0.5 transition-all text-sm md:text-base uppercase tracking-widest flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-bicycle"></i>
+                    <span>Jetzt online bestellen</span>
+                </a>
+                <a href="#menu" class="px-8 py-4 bg-[#1a1a1e] border border-white/10 hover:border-gold-500/50 text-white text-center font-bold rounded-xl hover:bg-stone-900 transition-all text-sm md:text-base flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-utensils text-gold-400"></i>
+                    <span>Speisekarte ansehen</span>
+                </a>
+            </div>
+
+            <!-- Features list icons -->
+            <div class="grid grid-cols-3 gap-4 pt-8 border-t border-white/10 max-w-lg">
+                <div class="flex flex-col space-y-1">
+                    <span class="text-gold-400 text-lg font-bold">100% Frisch</span>
+                    <span class="text-xs text-stone-400">Echte Zutaten &amp; hausgemacht</span>
+                </div>
+                <div class="flex flex-col space-y-1">
+                    <span class="text-gold-400 text-lg font-bold">Schneller Service</span>
+                    <span class="text-xs text-stone-400">Heiß &amp; lecker geliefert</span>
+                </div>
+                <div class="flex flex-col space-y-1">
+                    <span class="text-gold-400 text-lg font-bold">Premium Grill</span>
+                    <span class="text-xs text-stone-400">Echte Holzkohle-Aromen</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Visual Highlight Card on Desktop -->
+        <div class="lg:col-span-5 hidden lg:flex justify-center relative">
+            <div class="relative group">
+                <!-- Golden Glow Behind Food Card -->
+                <div class="absolute -inset-1.5 bg-gradient-to-r from-gold-500 to-amber-500 rounded-2xl blur opacity-30 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
+                
+                <div class="relative w-80 bg-[#121214] border border-white/10 p-5 rounded-2xl shadow-2xl flex flex-col space-y-4">
+                    <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=2070&auto=format&fit=crop" 
+                         alt="Frische Ofenfrische Pizza Salami" 
+                         class="w-full h-48 object-cover rounded-xl shadow-md group-hover:scale-[1.03] transition-transform duration-500"
+                         onerror="this.src='https://placehold.co/400x300/120a05/ffe6a7?text=Ofenfrische+Pizza'">
+                    
+                    <div class="absolute top-8 right-8 bg-brandAccent text-white text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full shadow-lg">
+                        Sehr Beliebt 🔥
+                    </div>
+
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center">
+                            <h3 class="font-bold text-lg text-white">Pizza Topkapi Spezial</h3>
+                        </div>
+                        <p class="text-xs text-stone-400 leading-relaxed">
+                            Belegt mit würzigem Premium-Dönerfleisch, frischen Champignons, echtem Mozzarella, Sauce Hollandaise und Kräutern aus dem Ofen.
+                        </p>
+                    </div>
+
+                    <a href="https://www.lieferando.de/speisekarte/topkapi-grill-und-pizzeria-45701" target="_blank" rel="noopener noreferrer" class="w-full bg-gold-500/10 hover:bg-gold-500 text-gold-400 hover:text-black font-extrabold py-2.5 rounded-xl transition text-xs flex items-center justify-center space-x-2 border border-gold-500/20">
+                        <i class="fa-solid fa-bicycle"></i>
+                        <span>Auf Lieferando bestellen</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 2. Über Uns / Geschichte -->
+<section id="about" class="py-24 relative bg-[#0B0C10]">
+    <div class="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-[#070709] to-[#0B0C10]"></div>
+    <div class="max-w-7xl mx-auto px-4 md:px-8 relative z-10">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <!-- Left Side Image Layout -->
+            <div class="relative grid grid-cols-2 gap-4">
+                <div class="space-y-4">
+                    <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=1000&auto=format&fit=crop" 
+                         alt="Türkische Grillgerichte" 
+                         class="rounded-2xl object-cover h-64 w-full shadow-lg hover:brightness-110 transition duration-300"
+                         onerror="this.src='https://placehold.co/400x500/120a05/ffe6a7?text=Grillgerichte'">
+                    <img src="https://images.unsplash.com/photo-1628840042765-356cda07504e?q=80&w=1000&auto=format&fit=crop" 
+                         alt="Dönerfleisch frisch geschnitten" 
+                         class="rounded-2xl object-cover h-44 w-full shadow-lg hover:brightness-110 transition duration-300"
+                         onerror="this.src='https://placehold.co/400x300/120a05/ffe6a7?text=Frischer+Doener'">
+                </div>
+                <div class="space-y-4 pt-8">
+                    <div class="bg-gradient-to-tr from-gold-500 to-amber-600 p-8 rounded-2xl text-black flex flex-col justify-between h-44 shadow-xl">
+                        <i class="fa-solid fa-heart text-3xl opacity-80"></i>
+                        <div>
+                            <span class="block text-4xl font-extrabold">100%</span>
+                            <span class="text-xs uppercase font-bold tracking-widest opacity-90">Hausgemachte Leidenschaft</span>
+                        </div>
+                    </div>
+                    <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=1000&auto=format&fit=crop" 
+                         alt="Brotzubereitung Ofen" 
+                         class="rounded-2xl object-cover h-64 w-full shadow-lg hover:brightness-110 transition duration-300"
+                         onerror="this.src='https://placehold.co/400x500/120a05/ffe6a7?text=Ofenfrisch'">
+                </div>
+            </div>
+
+            <!-- Right Side Texts -->
+            <div class="space-y-8">
+                <div class="space-y-3">
+                    <span class="text-gold-400 font-extrabold uppercase tracking-widest text-xs">Aus Leidenschaft geboren</span>
+                    <h2 class="heading-serif text-3xl md:text-5xl font-extrabold text-white">Tradition, Qualität &amp; familiäre Gastfreundschaft</h2>
+                </div>
+                
+                <div class="space-y-6 text-stone-300 font-light leading-relaxed">
+                    <p>
+                        Seit jeher steht the Name <strong class="text-white font-medium">Topkapi-Grill &amp; Pizzeria</strong> in Herten für außergewöhnlichen Genuss und hervorragende Zutaten. Unsere Mission ist simpel: Wir wollen dich glücklich machen. Jedes Gericht bereiten wir mit die gleichen Hingabe und Qualität zu, wie wir es für unsere eigene Familie tun würden.
+                    </p>
+                    <p>
+                        Unsere Dönerspieße bestehen aus sorgfältig ausgewähltem Fleisch, perfekt mariniert nach altem Familienrezept. Die Pizzen gleiten frisch auf dem Schamottestein in unseren Ofen und unsere originalen Grillspieße entwickeln über echter Hitze das unvergleichliche Aroma des Orients.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-6 pt-4 border-t border-white/10">
+                    <div class="flex items-start space-x-3">
+                        <div class="p-2.5 rounded-xl bg-gold-500/10 text-gold-400 mt-1">
+                            <i class="fa-solid fa-pepper-hot"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-white">Feinste Gewürze</h4>
+                            <p class="text-xs text-stone-400 mt-1">Ausgewogene, traditionelle Gewürzmischungen.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-3">
+                        <div class="p-2.5 rounded-xl bg-gold-500/10 text-gold-400 mt-1">
+                            <i class="fa-solid fa-clock"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-white">Immer Frisch</h4>
+                            <p class="text-xs text-stone-400 mt-1">Tägliche Lieferung von Gemüse, Fleisch und Salat.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-4">
+                    <a href="#menu" class="inline-flex items-center space-x-2 text-gold-400 font-bold hover:text-gold-300 transition-all group">
+                        <span>Unsere Speisekarte entdecken</span>
+                        <i class="fa-solid fa-arrow-right group-hover:translate-x-1.5 transition-transform"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 3. Das Lokal / Ambiente & Ausstattung -->
+<section id="lokal" class="py-24 relative bg-[#070709] border-t border-b border-white/5">
+    <div class="absolute inset-0 bg-gradient-to-tr from-amber-950/10 via-transparent to-transparent pointer-events-none"></div>
+    
+    <div class="max-w-7xl mx-auto px-4 md:px-8 relative z-10">
+        <div class="text-center max-w-2xl mx-auto space-y-4 mb-16">
+            <span class="text-gold-400 font-extrabold uppercase tracking-widest text-xs">Komm vorbei</span>
+            <h2 class="heading-serif text-3xl md:text-5xl font-extrabold text-white">Unser Lokal in Herten</h2>
+            <p class="text-stone-400 font-light text-sm md:text-base">
+                Genieße feine orientalische Spezialitäten und herzhafte Steinofen-Pizzen direkt in unserem stilvollen, gemütlich gestalteten Innenbereich.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+            <!-- Feature 1: Innenbereich -->
+            <div class="bg-[#121214] border border-white/5 rounded-2xl p-8 hover:border-gold-500/35 transition-all duration-300 space-y-6 group">
+                <div class="w-16 h-16 rounded-2xl bg-gold-500/10 flex items-center justify-center text-gold-400 text-2xl group-hover:scale-110 transition-transform">
+                    <i class="fa-solid fa-couch"></i>
+                </div>
+                <div class="space-y-3">
+                    <h3 class="text-xl font-bold text-white">Gemütliches Ambiente</h3>
+                    <p class="text-stone-400 text-sm font-light leading-relaxed">
+                        Unser Gastraum bietet eine warme, stilvolle Atmosphäre mit bequemen Sitzgelegenheiten. Ob schnelles Mittagessen oder gemütliches Abendessen mit Freunden – bei uns fühlst du dich wie zu Hause.
+                    </p>
+                </div>
+                <div class="rounded-xl overflow-hidden h-48 w-full relative group">
+                    <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=600&auto=format&fit=crop" 
+                         alt="Unser Gastraum gemütliche Beleuchtung" 
+                         class="w-full h-full object-cover filter brightness-75 transition duration-500 group-hover:scale-105"
+                         onerror="this.src='https://placehold.co/600x400/120a05/ffe6a7?text=Gastraum+Atmosphaere'">
+                    <span class="absolute bottom-2 left-2 bg-black/70 backdrop-blur-md text-gold-400 font-semibold px-2.5 py-1 rounded-md text-[10px]">Stilvoller Innenbereich</span>
+                </div>
+            </div>
+
+            <!-- Feature 2: Sauberkeit & Service -->
+            <div class="bg-[#121214] border border-white/5 rounded-2xl p-8 hover:border-gold-500/35 transition-all duration-300 space-y-6 group">
+                <div class="w-16 h-16 rounded-2xl bg-gold-500/10 flex items-center justify-center text-gold-400 text-2xl group-hover:scale-110 transition-transform">
+                    <i class="fa-solid fa-kitchen-set"></i>
+                </div>
+                <div class="space-y-3">
+                    <h3 class="text-xl font-bold text-white">Hygiene &amp; Transparenz</h3>
+                    <p class="text-stone-400 text-sm font-light leading-relaxed">
+                        Bei uns schaust du dem Grillmeister direkt über die Schulter. Unsere Küche ist offen gestaltet und wir legen allerhöchsten Wert auf kompromisslose Frische, tadellose Sauberkeit und ein herzliches Lächeln.
+                    </p>
+                </div>
+                <div class="rounded-xl overflow-hidden h-48 w-full relative group">
+                    <img src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?q=80&w=600&auto=format&fit=crop" 
+                         alt="Offene saubere Kueche" 
+                         class="w-full h-full object-cover filter brightness-75 transition duration-500 group-hover:scale-105"
+                         onerror="this.src='https://placehold.co/600x400/120a05/ffe6a7?text=Offene+Kueche'">
+                    <span class="absolute bottom-2 left-2 bg-black/70 backdrop-blur-md text-gold-400 font-semibold px-2.5 py-1 rounded-md text-[10px]">Offene Showküche</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Venue Stats Panel -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-12 pt-12 border-t border-white/5 text-center">
+            <div class="space-y-1">
+                <span class="block text-3xl font-extrabold text-gold-400">20+</span>
+                <span class="block text-xs text-stone-400 uppercase tracking-widest">Sitzplätze </span>
+            </div>
+            <div class="space-y-1">
+                <span class="block text-3xl font-extrabold text-gold-400">Kostenlos</span>
+                <span class="block text-xs text-stone-400 uppercase tracking-widest">Parken vor der Tür</span>
+            </div>
+            <div class="space-y-1">
+                <span class="block text-3xl font-extrabold text-gold-400">Barrierefrei</span>
+                <span class="block text-xs text-stone-400 uppercase tracking-widest">Einfacher Zugang</span>
+            </div>
+            <div class="space-y-1">
+                <span class="block text-3xl font-extrabold text-gold-400">Klimatisiert</span>
+                <span class="block text-xs text-stone-400 uppercase tracking-widest">Angenehme Raumluft</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 4. Speisekarte / Highlights -->
+<section id="menu" class="py-24 relative bg-[#070709]">
+    <div class="absolute top-0 right-1/4 w-96 h-96 bg-gold-500/5 rounded-full blur-[120px] pointer-events-none"></div>
+    
+    <div class="max-w-7xl mx-auto px-4 md:px-8 relative z-10">
+        <!-- Section Header -->
+        <div class="text-center max-w-2xl mx-auto space-y-4 mb-16">
+            <span class="text-gold-400 font-extrabold uppercase tracking-widest text-xs">Frisch aus unserer Küche</span>
+            <h2 class="heading-serif text-3xl md:text-5xl font-extrabold text-white">Unsere Bestseller</h2>
+            <p class="text-stone-400 font-light text-sm md:text-base">
+                Entdecke unsere beliebtesten Gerichte. Wähle deine Lieblingsspeisen und bestelle sie ganz einfach online über unseren Lieferando-Partnershop!
+            </p>
+        </div>
+
+        <!-- Food Grid Container -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="menu-grid">
+            
+            <!-- Food Card 1: Pomm-Döner (Döner) -->
+            <div class="food-card bg-[#121214]/90 border border-white/5 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl hover:border-gold-500/40 hover:-translate-y-1.5 transition-all duration-300 group" data-category="doener">
+                <div class="relative h-56 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1529042410759-befb1204b468?q=80&w=1000&auto=format&fit=crop" 
+                         alt="Knuspriger Pomm-Döner" 
+                         class="w-full h-full object-cover group-hover:scale-110 transition duration-500"
+                         onerror="this.src='https://placehold.co/500x350/120a05/ffe6a7?text=Pomm-Doener'">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                    <span class="absolute top-4 left-4 bg-amber-500 text-black font-black text-[10px] uppercase tracking-widest px-3 py-1 rounded-full shadow-lg">Bestseller 🔥</span>
+                </div>
+                <div class="p-6 space-y-4">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="font-extrabold text-xl text-white group-hover:text-gold-400 transition-colors">Premium Pomm-Döner</h3>
+                            <p class="text-xs text-stone-500 mt-1">Knusprig &amp; saftig geschichtet</p>
+                        </div>
+                    </div>
+                    <p class="text-stone-400 text-xs font-light leading-relaxed line-clamp-2">
+                        Eine fantastische Schicht aus goldgelben, knusprigen Pommes, saftig frisch geschnittenem Dönerfleisch und unserer legendären hausgemachten Knoblauchsauce.
+                    </p>
+                    <div class="pt-3 border-t border-white/5 flex items-center justify-between">
+                        <span class="text-xs text-stone-500 flex items-center space-x-1">
+                            <i class="fa-solid fa-thumbs-up text-gold-500"></i>
+                            <span>98% Zufrieden</span>
+                        </span>
+                        <a href="https://www.lieferando.de/speisekarte/topkapi-grill-und-pizzeria-45701" target="_blank" rel="noopener noreferrer" class="px-4 py-2 bg-gradient-to-r from-gold-400 to-amber-500 text-black text-xs font-bold rounded-lg hover:brightness-110 transition flex items-center space-x-1.5">
+                            <i class="fa-solid fa-shopping-basket"></i>
+                            <span>Bestellen</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Food Card 2: Lahmacun Spezial (Lahmacun) -->
+            <div class="food-card bg-[#121214]/90 border border-white/5 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl hover:border-gold-500/40 hover:-translate-y-1.5 transition-all duration-300 group" data-category="lahmacun">
+                <div class="relative h-56 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=1000&auto=format&fit=crop" 
+                         alt="Knusprige Lahmacun Spezial" 
+                         class="w-full h-full object-cover group-hover:scale-110 transition duration-500"
+                         onerror="this.src='https://placehold.co/500x350/120a05/ffe6a7?text=Lahmacun'">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                    <span class="absolute top-4 left-4 bg-emerald-500 text-white font-black text-[10px] uppercase tracking-widest px-3 py-1 rounded-full shadow-lg">Traditions-Klassiker 🥙</span>
+                </div>
+                <div class="p-6 space-y-4">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="font-extrabold text-xl text-white group-hover:text-gold-400 transition-colors">Lahmacun Spezial</h3>
+                            <p class="text-xs text-stone-500 mt-1">Knusprig &amp; würzig</p>
+                        </div>
+                    </div>
+                    <p class="text-stone-400 text-xs font-light leading-relaxed line-clamp-2">
+                        Dünner, knusprig gebackener Fladen mit würziger Hackfleisch-Sauce, verfeinert mit frischem Salat, Tomaten und Zwiebeln – ein echter Klassiker.
+                    </p>
+                    <div class="pt-3 border-t border-white/5 flex items-center justify-between">
+                        <span class="text-xs text-stone-500 flex items-center space-x-1">
+                            <i class="fa-solid fa-bread-slice text-emerald-500"></i>
+                            <span>Ofenfrisch</span>
+                        </span>
+                        <a href="https://www.lieferando.de/speisekarte/topkapi-grill-und-pizzeria-45701" target="_blank" rel="noopener noreferrer" class="px-4 py-2 bg-gradient-to-r from-gold-400 to-amber-500 text-black text-xs font-bold rounded-lg hover:brightness-110 transition flex items-center space-x-1.5">
+                            <i class="fa-solid fa-shopping-basket"></i>
+                            <span>Bestellen</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Food Card 3: Pizza Margherita (Pizza) -->
+            <div class="food-card bg-[#121214]/90 border border-white/5 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl hover:border-gold-500/40 hover:-translate-y-1.5 transition-all duration-300 group" data-category="pizza">
+                <div class="relative h-56 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1604068549290-dea0e4a305ca?q=80&w=1000&auto=format&fit=crop" 
+                         alt="Steinofen Pizza Margherita" 
+                         class="w-full h-full object-cover group-hover:scale-110 transition duration-500"
+                         onerror="this.src='https://placehold.co/500x350/120a05/ffe6a7?text=Pizza+Margherita'">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                    <span class="absolute top-4 left-4 bg-amber-500 text-black font-black text-[10px] uppercase tracking-widest px-3 py-1 rounded-full shadow-lg">Steinofen 🔥</span>
+                </div>
+                <div class="p-6 space-y-4">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="font-extrabold text-xl text-white group-hover:text-gold-400 transition-colors">Pizza Margherita</h3>
+                            <p class="text-xs text-stone-500 mt-1">Klassisch-italienischer Traum</p>
+                        </div>
+                    </div>
+                    <p class="text-stone-400 text-xs font-light leading-relaxed line-clamp-2">
+                        Ofenfrischer, luftig-knuspriger Hefeteig mit fruchtiger, hauseigener Tomatensauce, cremig schmelzendem Käse und einer feinen Oregano-Note.
+                    </p>
+                    <div class="pt-3 border-t border-white/5 flex items-center justify-between">
+                        <span class="text-xs text-stone-500 flex items-center space-x-1">
+                            <i class="fa-solid fa-cheese text-amber-500"></i>
+                            <span>Echter Mozarella</span>
+                        </span>
+                        <a href="https://www.lieferando.de/speisekarte/topkapi-grill-und-pizzeria-45701" target="_blank" rel="noopener noreferrer" class="px-4 py-2 bg-gradient-to-r from-gold-400 to-amber-500 text-black text-xs font-bold rounded-lg hover:brightness-110 transition flex items-center space-x-1.5">
+                            <i class="fa-solid fa-shopping-basket"></i>
+                            <span>Bestellen</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Food Card 4: Döner Tasche (Döner) -->
+            <div class="food-card bg-[#121214]/90 border border-white/5 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl hover:border-gold-500/40 hover:-translate-y-1.5 transition-all duration-300 group" data-category="doener">
+                <div class="relative h-56 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1541518763669-27fef04b14ea?q=80&w=1000&auto=format&fit=crop" 
+                         alt="Döner Tasche" 
+                         class="w-full h-full object-cover group-hover:scale-110 transition duration-500"
+                         onerror="this.src='https://placehold.co/500x350/120a05/ffe6a7?text=Doener+Tasche'">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                    <span class="absolute top-4 left-4 bg-red-600 text-white font-black text-[10px] uppercase tracking-widest px-3 py-1 rounded-full shadow-lg">Der Klassiker 🥙</span>
+                </div>
+                <div class="p-6 space-y-4">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="font-extrabold text-xl text-white group-hover:text-gold-400 transition-colors">Kalbsdöner Tasche</h3>
+                            <p class="text-xs text-stone-500 mt-1">Im ofenfrischen Fladenbrot</p>
+                        </div>
+                    </div>
+                    <p class="text-stone-400 text-xs font-light leading-relaxed line-clamp-2">
+                        Sorgfältig gewürztes, zartes Kalbfleisch mit knackigem Eisbergsalat, Zwiebeln, Tomaten und wahlweise würzigem Tzatziki oder pikanter Cocktailsauce.
+                    </p>
+                    <div class="pt-3 border-t border-white/5 flex items-center justify-between">
+                        <span class="text-xs text-stone-500 flex items-center space-x-1">
+                            <i class="fa-solid fa-leaf text-emerald-500"></i>
+                            <span>Sehr saftig</span>
+                        </span>
+                        <a href="https://www.lieferando.de/speisekarte/topkapi-grill-und-pizzeria-45701" target="_blank" rel="noopener noreferrer" class="px-4 py-2 bg-gradient-to-r from-gold-400 to-amber-500 text-black text-xs font-bold rounded-lg hover:brightness-110 transition flex items-center space-x-1.5">
+                            <i class="fa-solid fa-shopping-basket"></i>
+                            <span>Bestellen</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Food Card 5: Döner Teller (Grill) -->
+            <div class="food-card bg-[#121214]/90 border border-white/5 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl hover:border-gold-500/40 hover:-translate-y-1.5 transition-all duration-300 group" data-category="grill">
+                <div class="relative h-56 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=1000&auto=format&fit=crop" 
+                         alt="Döner Teller" 
+                         class="w-full h-full object-cover group-hover:scale-110 transition duration-500"
+                         onerror="this.src='https://placehold.co/500x350/120a05/ffe6a7?text=Doener+Teller'">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                    <span class="absolute top-4 left-4 bg-gold-500 text-black font-black text-[10px] uppercase tracking-widest px-3 py-1 rounded-full shadow-lg">Holzkohle Spezial 🔥</span>
+                </div>
+                <div class="p-6 space-y-4">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="font-extrabold text-xl text-white group-hover:text-gold-400 transition-colors">Döner Teller</h3>
+                            <p class="text-xs text-stone-500 mt-1">Traditioneller Fleischgenuss</p>
+                        </div>
+                    </div>
+                    <p class="text-stone-400 text-xs font-light leading-relaxed line-clamp-2">
+                        Würziges Dönerfleisch serviert mit gegrillter Tomate, Peperoni, frischem Reis oder Pommes und Zwiebelsalat.
+                    </p>
+                    <div class="pt-3 border-t border-white/5 flex items-center justify-between">
+                        <span class="text-xs text-stone-500 flex items-center space-x-1">
+                            <i class="fa-solid fa-fire-burner text-amber-500"></i>
+                            <span>Premium Qualität</span>
+                        </span>
+                        <a href="https://www.lieferando.de/speisekarte/topkapi-grill-und-pizzeria-45701" target="_blank" rel="noopener noreferrer" class="px-4 py-2 bg-gradient-to-r from-gold-400 to-amber-500 text-black text-xs font-bold rounded-lg hover:brightness-110 transition flex items-center space-x-1.5">
+                            <i class="fa-solid fa-shopping-basket"></i>
+                            <span>Bestellen</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Food Card 6: Pizza Hollandaise Döner (Pizza) -->
+            <div class="food-card bg-[#121214]/90 border border-white/5 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl hover:border-gold-500/40 hover:-translate-y-1.5 transition-all duration-300 group" data-category="pizza">
+                <div class="relative h-56 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=1000&auto=format&fit=crop" 
+                         alt="Döner Pizza Hollandaise" 
+                         class="w-full h-full object-cover group-hover:scale-110 transition duration-500"
+                         onerror="this.src='https://placehold.co/500x350/120a05/ffe6a7?text=Pizza+Hollandaise'">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                    <span class="absolute top-4 left-4 bg-amber-500 text-black font-black text-[10px] uppercase tracking-widest px-3 py-1 rounded-full shadow-lg">Highlight 👑</span>
+                </div>
+                <div class="p-6 space-y-4">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="font-extrabold text-xl text-white group-hover:text-gold-400 transition-colors">Döner Pizza Hollandaise</h3>
+                            <p class="text-xs text-stone-500 mt-1">Cremig-würzige Fusion</p>
+                        </div>
+                    </div>
+                    <p class="text-stone-400 text-xs font-light leading-relaxed line-clamp-2">
+                        Unsere Spezialität: Ofenfrischer Teig belegt mit saftigem Dönerfleisch, milder Sauce Hollandaise und goldbraun geschmolzenem Gouda.
+                    </p>
+                    <div class="pt-3 border-t border-white/5 flex items-center justify-between">
+                        <span class="text-xs text-stone-500 flex items-center space-x-1">
+                            <i class="fa-solid fa-star text-gold-500"></i>
+                            <span>Top bewertet</span>
+                        </span>
+                        <a href="https://www.lieferando.de/speisekarte/topkapi-grill-und-pizzeria-45701" target="_blank" rel="noopener noreferrer" class="px-4 py-2 bg-gradient-to-r from-gold-400 to-amber-500 text-black text-xs font-bold rounded-lg hover:brightness-110 transition flex items-center space-x-1.5">
+                            <i class="fa-solid fa-shopping-basket"></i>
+                            <span>Bestellen</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- 5. Kundenstimmen / Reviews Section -->
+<section id="reviews" class="py-24 relative bg-[#0B0C10]">
+    <div class="absolute inset-0 bg-gradient-to-b from-[#070709] via-transparent to-[#0B0C10] pointer-events-none"></div>
+    <div class="max-w-7xl mx-auto px-4 md:px-8 relative z-10">
+        
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+            <!-- Review Intro & Summary -->
+            <div class="lg:col-span-5 space-y-6">
+                <span class="text-gold-400 font-extrabold uppercase tracking-widest text-xs">Echtes Feedback</span>
+                <h2 class="heading-serif text-3xl md:text-5xl font-extrabold text-white leading-tight">Was unsere Kunden sagen</h2>
+                <p class="text-stone-300 font-light leading-relaxed">
+                    Kundenzufriedenheit ist unser höchstes Gut. Jedes Gericht wird stets frisch zubereitet, um deinen Ansprüchen gerecht zu werden. Lies die echten Meinungen unserer Gäste aus Herten!
+                </p>
+                
+                <!-- Aggregate Stats -->
+                <div class="p-6 bg-[#121214] border border-white/5 rounded-2xl flex items-center justify-between shadow-xl">
+                    <div>
+                        <span class="block text-4xl font-black text-white">4.2 <span class="text-lg text-stone-500">/ 5</span></span>
+                        <div class="flex items-center space-x-1 text-gold-400 mt-1">
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                        </div>
+                        <span class="block text-xs text-stone-400 mt-2">Basierend auf über 320 Google-Bewertungen</span>
+                    </div>
+                    <div class="w-20 h-20 rounded-full bg-gold-500/10 border border-gold-500/25 flex items-center justify-center text-gold-400">
+                        <i class="fa-solid fa-comments text-3xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scrollable Customer Reviews List -->
+            <div class="lg:col-span-7 space-y-6 max-h-[600px] overflow-y-auto pr-2 no-scrollbar" id="reviews-list-container">
+                <!-- Reviews will be rendered here dynamically via JavaScript -->
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- 6. Atmosphere / Gallery -->
+<section id="atmosphere" class="py-24 relative bg-[#070709]">
+    <div class="max-w-7xl mx-auto px-4 md:px-8 relative z-10">
+        
+        <div class="text-center max-w-2xl mx-auto space-y-4 mb-16">
+            <span class="text-gold-400 font-extrabold uppercase tracking-widest text-xs">Unser Ambiente</span>
+            <h2 class="heading-serif text-3xl md:text-5xl font-extrabold text-white">Galerie des guten Geschmacks</h2>
+            <p class="text-stone-400 font-light text-sm md:text-base">
+                Werfen Sie einen Blick in unsere Showküche, unser gemütliches Restaurant und auf unsere frisch angerichteten Spezialitäten.
+            </p>
+        </div>
+
+        <!-- Interactive Grid Gallery with Lightbox support -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="group relative cursor-pointer overflow-hidden rounded-2xl h-64" onclick="openLightbox('https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=1000')">
+                <img src="https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=1000" alt="Zarte Grillspezialitäten" class="w-full h-full object-cover group-hover:scale-110 duration-500 transition transform brightness-90 group-hover:brightness-100">
+                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center">
+                    <i class="fa-solid fa-maximize text-white text-2xl"></i>
+                </div>
+            </div>
+            <div class="group relative cursor-pointer overflow-hidden rounded-2xl h-64" onclick="openLightbox('https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=1000')">
+                <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=1000" alt="Pizza frisch aus dem Ofen" class="w-full h-full object-cover group-hover:scale-110 duration-500 transition transform brightness-90 group-hover:brightness-100">
+                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center">
+                    <i class="fa-solid fa-maximize text-white text-2xl"></i>
+                </div>
+            </div>
+            <div class="group relative cursor-pointer overflow-hidden rounded-2xl h-64" onclick="openLightbox('https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=1000')">
+                <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=1000" alt="Liebevoll zubereitete Teller" class="w-full h-full object-cover group-hover:scale-110 duration-500 transition transform brightness-90 group-hover:brightness-100">
+                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center">
+                    <i class="fa-solid fa-maximize text-white text-2xl"></i>
+                </div>
+            </div>
+            <div class="group relative cursor-pointer overflow-hidden rounded-2xl h-64" onclick="openLightbox('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=1000')">
+                <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=1000" alt="Echter Steinofen" class="w-full h-full object-cover group-hover:scale-110 duration-500 transition transform brightness-90 group-hover:brightness-100">
+                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center">
+                    <i class="fa-solid fa-maximize text-white text-2xl"></i>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- 7. Kontakt, Öffnungszeiten & Anfahrt -->
+<section id="contact" class="py-24 relative bg-[#0B0C10] border-t border-white/5">
+    <div class="max-w-7xl mx-auto px-4 md:px-8 relative z-10">
+        
+        <div class="max-w-3xl mx-auto space-y-12">
+            <!-- Info Panel -->
+            <div class="space-y-8 text-center">
+                <div class="space-y-3">
+                    <span class="text-gold-400 font-extrabold uppercase tracking-widest text-xs">Besuche uns</span>
+                    <h2 class="heading-serif text-3xl md:text-5xl font-extrabold text-white leading-tight">Kontakt & Anfahrt</h2>
+                    <p class="text-stone-300 font-light leading-relaxed">
+                        Du findest den **Topkapi-Grill** zentral an der Hauptstraße in Herten-Langenbochum. Kostenfreie Parkplätze sind direkt vor der Tür vorhanden.
+                    </p>
+                </div>
+
+                <!-- Contact items -->
+                <div class="flex flex-col sm:flex-row justify-center gap-6">
+                    <div class="flex flex-col items-center space-y-4 p-6 bg-[#121214] border border-white/5 rounded-2xl w-full sm:w-64">
+                        <div class="p-3 bg-stone-900 border border-white/10 rounded-xl text-gold-400">
+                            <i class="fa-solid fa-map-location-dot text-xl"></i>
+                        </div>
+                        <div class="text-center">
+                            <h4 class="font-bold text-white text-sm">Adresse</h4>
+                            <p class="text-sm text-stone-400 mt-1">Langenbochumer Str. 193<br>45701 Herten, Deutschland</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-center space-y-4 p-6 bg-[#121214] border border-white/5 rounded-2xl w-full sm:w-64">
+                        <div class="p-3 bg-stone-900 border border-white/10 rounded-xl text-gold-400">
+                            <i class="fa-solid fa-phone text-xl"></i>
+                        </div>
+                        <div class="text-center">
+                            <h4 class="font-bold text-white text-sm">Telefonische Bestellung</h4>
+                            <p class="text-sm text-stone-400 mt-1 hover:text-gold-400"><a href="tel:02366585616">02366 585616</a></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Opening Hours Detailed -->
+                <div class="p-6 bg-[#121214] border border-white/5 rounded-2xl shadow-xl space-y-4 max-w-lg mx-auto">
+                    <h3 class="font-extrabold text-lg text-white flex items-center justify-center space-x-2">
+                        <i class="fa-solid fa-clock text-gold-400"></i>
+                        <span>Öffnungszeiten</span>
+                    </h3>
+                    <div class="space-y-2 text-sm text-stone-300">
+                        <div class="flex justify-between pb-2 border-b border-white/5">
+                            <span>Montag - Sonntag</span>
+                            <span class="font-semibold text-white">12:00 - 22:00 Uhr</span>
+                        </div>
+                        <div class="flex justify-between items-center bg-emerald-500/10 border border-emerald-500/20 px-3 py-2 rounded-xl text-xs text-emerald-400 font-bold mt-2" id="contact-hours-badge">
+                            <span>Aktueller Status:</span>
+                            <span id="contact-status-text">Jetzt geöffnet</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-black/90 border-t border-white/10 py-12 px-4 text-center text-xs text-stone-500">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="text-left space-y-2">
+            <span class="block text-sm font-bold text-white tracking-widest">TOPKAPI HERTEN</span>
+            <span class="block">© 2026 Topkapi-Grill &amp; Pizzeria. Alle Rechte vorbehalten.</span>
+        </div>
+        <div class="flex space-x-6 text-stone-400 font-medium">
+            <a href="#about" class="hover:text-gold-400 transition">Über Uns</a>
+            <a href="#lokal" class="hover:text-gold-400 transition">Unser Lokal</a>
+            <a href="#menu" class="hover:text-gold-400 transition">Speisekarte</a>
+            <a href="#contact" class="hover:text-gold-400 transition">Impressum</a>
+            <a href="#contact" class="hover:text-gold-400 transition">Datenschutz</a>
+        </div>
+    </div>
+</footer>
+
+<!-- Image Lightbox Modal -->
+<div id="lightbox-modal" class="fixed inset-0 bg-black/95 z-[150] flex items-center justify-center p-4 hidden" onclick="closeLightbox()">
+    <button class="absolute top-6 right-6 p-3 text-white text-2xl hover:text-gold-400"><i class="fa-solid fa-xmark"></i></button>
+    <img id="lightbox-img" src="" alt="Großansicht" class="max-w-full max-h-[85vh] rounded-xl shadow-2xl object-contain">
+</div>
+
+<script>
+    // List of static customer reviews
+    const reviewsList = [
+        { name: "Sandro B.", rating: 5, date: "Gestern", text: "Die Döner Pizza Hollandaise ist einfach ein Gedicht! Knuspriger Rand und super zartes Fleisch. Absolute Empfehlung!" },
+        { name: "Jasmin K.", rating: 4, date: "Vor 3 Tagen", text: "Der Döner Teller schmeckt wie im Urlaub. Zwar war es am Freitagabend ziemlich voll und wir mussten kurz warten, aber das Essen entschädigt absolut für die Zeit." },
+        { name: "Oliver M.", rating: 5, date: "Vor 1 Woche", text: "Endlich mal ein Laden, der auch bei Lieferung noch heiße Pizza bringt. Pomm-Döner war super knusprig, wie man es sich wünscht. Werde wieder bestellen." },
+        { name: "Melanie T.", rating: 4, date: "Vor 2 Wochen", text: "Sehr sauberes Lokal und freundliches Personal. Die Sitzplätze direkt am Fenster sind gemütlich, aber im Gastraum kann es bei vollem Haus schon mal etwas lauter werden. Essen top!" },
+        { name: "Dennis H.", rating: 5, date: "Vor 3 Wochen", text: "Ich bin seit Jahren Stammkunde. Die Qualität des Fleisches is konstant gut, was hier in Herten leider nicht überall der Fall ist. Weiter so!" },
+        { name: "Fatima R.", rating: 3, date: "Vor 1 Monat", text: "Das Essen ist sehr lecker und die Portionen sind wirklich groß. Leider gab es ein kleines Missverständnis bei meiner Sonderbestellung am Telefon, wurde aber direkt vor Ort geklärt. Freundlicher Service." }
+    ];
+
+    // Check opening status based on daily hours: 12:00 to 22:00
+    function checkOpeningHours() {
+        const now = new Date();
+        const hour = now.getHours();
+        const minute = now.getMinutes();
+        const currentTotalMinutes = hour * 60 + minute;
+        
+        const openTime = 12 * 60;
+        const closeTime = 22 * 60;
+        
+        const isOpen = currentTotalMinutes >= openTime && currentTotalMinutes < closeTime;
+        
+        const badge = document.getElementById('opening-status-badge');
+        const headerText = document.getElementById('header-status');
+        const ping = document.getElementById('ping-indicator');
+        const dot = document.getElementById('dot-indicator');
+        const contactBadge = document.getElementById('contact-hours-badge');
+        const contactText = document.getElementById('contact-status-text');
+        
+        if (isOpen) {
+            if (headerText) {
+                headerText.innerText = "Jetzt geöffnet!";
+                headerText.className = "text-xs text-emerald-400 font-semibold";
+            }
+            if (ping) ping.className = "animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75";
+            if (dot) dot.className = "relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500";
+            if (badge) badge.className = "hidden lg:flex items-center space-x-2 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-full";
+            
+            if (contactText) contactText.innerText = "Jetzt geöffnet";
+            if (contactBadge) contactBadge.className = "flex justify-between items-center bg-emerald-500/10 border border-emerald-500/20 px-3 py-2 rounded-xl text-xs text-emerald-400 font-bold mt-2";
+        } else {
+            if (headerText) {
+                headerText.innerText = "Derzeit geschlossen";
+                headerText.className = "text-xs text-amber-500 font-semibold";
+            }
+            if (ping) ping.className = "absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-0";
+            if (dot) dot.className = "relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500";
+            if (badge) badge.className = "hidden lg:flex items-center space-x-2 bg-amber-500/10 border border-amber-500/20 px-3 py-1.5 rounded-full";
+            
+            if (contactText) contactText.innerText = "Geschlossen (Öffnet um 12:00 Uhr)";
+            if (contactBadge) contactBadge.className = "flex justify-between items-center bg-amber-500/10 border border-amber-500/20 px-3 py-2 rounded-xl text-xs text-emerald-400 font-bold mt-2";
+        }
+    }
+
+    // Render review items inside the layout
+    function renderReviews() {
+        const container = document.getElementById('reviews-list-container');
+        if (!container) return;
+
+        container.innerHTML = '';
+        reviewsList.forEach(rev => {
+            let starsMarkup = '';
+            for (let i = 1; i <= 5; i++) {
+                if (i <= rev.rating) {
+                    starsMarkup += `<i class="fa-solid fa-star text-gold-400"></i>`;
+                } else {
+                    starsMarkup += `<i class="fa-solid fa-star text-stone-700"></i>`;
+                }
+            }
+
+            container.innerHTML += `
+                <div class="p-6 bg-[#121214] border border-white/5 rounded-2xl space-y-4 shadow-xl hover:border-gold-500/30 duration-300 transition-colors">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-stone-800 to-stone-900 flex items-center justify-center border border-white/10">
+                                <span class="font-bold text-sm text-white">${rev.name.charAt(0)}</span>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-sm text-white">${rev.name}</h4>
+                                <span class="text-[10px] text-stone-500 uppercase tracking-widest">${rev.date}</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-0.5 text-xs">
+                            ${starsMarkup}
+                        </div>
+                    </div>
+                    <p class="text-sm text-stone-300 font-light leading-relaxed">
+                        "${rev.text}"
+                    </p>
+                </div>
+            `;
+        });
+    }
+
+    // Photo Gallery Lightbox Functions
+    function openLightbox(src) {
+        const modal = document.getElementById('lightbox-modal');
+        const img = document.getElementById('lightbox-img');
+        img.src = src;
+        modal.classList.remove('hidden');
+    }
+
+    // Close lightbox
+    function closeLightbox() {
+        document.getElementById('lightbox-modal').classList.add('hidden');
+    }
+
+    // Contact Form Event Handler
+    function submitContactForm(event) {
+        event.preventDefault();
+        
+        // Show simulated beautiful pop-up receipt
+        const modal = document.createElement('div');
+        modal.className = "fixed inset-0 bg-black/80 backdrop-blur-md z-[200] flex items-center justify-center p-4";
+        modal.innerHTML = `
+            <div class="bg-[#121214] border border-gold-500/40 rounded-2xl w-full max-w-sm p-6 text-center space-y-4 shadow-2xl">
+                <div class="w-12 h-12 rounded-full bg-emerald-500/15 flex items-center justify-center mx-auto text-emerald-400">
+                    <i class="fa-solid fa-paper-plane text-lg"></i>
+                </div>
+                <h3 class="font-extrabold text-lg text-white">Nachricht gesendet!</h3>
+                <p class="text-xs text-stone-400 leading-relaxed">Vielen Dank für deine Nachricht. Unser Team wird sich schnellstmöglich bei dir zurückmelden.</p>
+                <button onclick="this.parentElement.parentElement.remove()" class="w-full py-2.5 bg-stone-900 hover:bg-stone-800 text-white font-bold text-xs uppercase tracking-widest rounded-xl transition">Okay</button>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        event.target.reset();
+    }
+
+    // Toggle drawer on Mobile devices
+    function toggleMobileMenu() {
+        const menu = document.getElementById('mobile-menu');
+        const icon = document.getElementById('menu-icon');
+        menu.classList.toggle('hidden');
+        if (menu.classList.contains('hidden')) {
+            icon.className = "fa-solid fa-bars text-2xl";
+        } else {
+            icon.className = "fa-solid fa-xmark text-2xl";
+        }
+    }
+
+    // Scroll trigger for styling navbar changes
+    window.addEventListener('scroll', () => {
+        const nav = document.getElementById('navbar');
+        if (window.scrollY > 40) {
+            nav.classList.add('bg-black/90', 'py-3', 'shadow-xl');
+            nav.classList.remove('bg-black/60', 'py-4');
+        } else {
+            nav.classList.add('bg-black/60', 'py-4');
+            nav.classList.remove('bg-black/90', 'py-3', 'shadow-xl');
+        }
+    });
+
+    // Window Onload triggers
+    window.onload = function() {
+        checkOpeningHours();
+        renderReviews();
+        setInterval(checkOpeningHours, 60000); // Check status every minute
+    };
+</script>
+
+</body>
+</html>
